@@ -30,14 +30,18 @@ class RegisterViewModel extends ChangeNotifier {
         loading = true;
         notifyListeners();
         try {
+          print("78");
           bool success = await auth.createUser(
             name: username,
             email: email,
             password: password,
             country: country,
           );
+          print("122");
           print(success);
           if (success) {
+            loading = false;
+            notifyListeners();
             Navigator.of(context).pushReplacement(
               CupertinoPageRoute(
                 builder: (_) => ProfilePicture(),
@@ -50,9 +54,10 @@ class RegisterViewModel extends ChangeNotifier {
           print(e);
           showInSnackBar(
               '${auth.handleFirebaseAuthError(e.toString())}', context);
+        } finally {
+          loading = false;
+          notifyListeners();
         }
-        loading = false;
-        notifyListeners();
       } else {
         showInSnackBar('The passwords does not match', context);
       }

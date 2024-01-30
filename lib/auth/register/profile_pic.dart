@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:social_media_app/components/custom_image.dart';
+import 'package:social_media_app/screens/mainscreen.dart';
 import 'package:social_media_app/view_models/auth/posts_view_model.dart';
 import 'package:social_media_app/widgets/indicators.dart';
 
@@ -15,11 +17,17 @@ class _ProfilePictureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
     PostsViewModel viewModel = Provider.of<PostsViewModel>(context);
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (bool r) async {
         viewModel.resetPost();
-        return true;
+        if (r) {
+          return;
+        }
       },
+      // onWillPop: () async {
+      //   viewModel.resetPost();
+      //   return true;
+      // },
       child: LoadingOverlay(
         progressIndicator: circularProgress(context),
         isLoading: viewModel.loading,
@@ -59,7 +67,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
                               child: Text(
                                 'Tap to add your profile picture',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                             )
@@ -72,25 +81,86 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 ),
               ),
               SizedBox(height: 10.0),
-              Center(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.secondary),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+              // Center(
+              //   child: ElevatedButton(
+              //     style: ButtonStyle(
+              //       backgroundColor: MaterialStateProperty.all<Color>(
+              //           Theme.of(context).colorScheme.secondary),
+              //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              //         RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(5.0),
+              //         ),
+              //       ),
+              //     ),
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(20.0),
+              //       child: Center(
+              //         child: Text('done'.toUpperCase()),
+              //       ),
+              //     ),
+              //     onPressed: () => viewModel.uploadProfilePicture(context),
+              //   ),
+              // ),
+
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text('done'.toUpperCase()),
+                          ),
+                          onPressed: () =>
+                              viewModel.uploadProfilePicture(context),
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                          width:
+                              16.0), // Adjust the width based on your spacing preference
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text('set later'.toUpperCase()),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              CupertinoPageRoute(
+                                builder: (_) => TabScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Center(
-                      child: Text('done'.toUpperCase()),
-                    ),
-                  ),
-                  onPressed: () => viewModel.uploadProfilePicture(context),
-                ),
+                ],
               ),
             ],
           ),

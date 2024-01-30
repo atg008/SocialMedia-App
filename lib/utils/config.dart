@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 
 class Config {
-  static initFirebase() async {
+  static initFirebase({required FirebaseOptions options}) async {
     await Firebase.initializeApp();
   }
 }

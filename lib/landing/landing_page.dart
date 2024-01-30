@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/auth/login/login.dart';
+import 'package:social_media_app/auth/register/register.dart';
 
 class Landing extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _LandingState extends State<Landing> {
               ),
             ),
             Text(
-              'WOOBLE',
+              'SYNCRAFT',
               style: TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.w900,
@@ -85,7 +86,7 @@ class _LandingState extends State<Landing> {
                 onTap: () {
                   Navigator.of(context).pushReplacement(
                     CupertinoPageRoute(
-                      builder: (_) => Login(),
+                      builder: (_) => Register(),
                     ),
                   );
                 },

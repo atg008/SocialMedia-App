@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:social_media_app/utils/firebase.dart';
@@ -15,31 +17,44 @@ class AuthService {
       String? email,
       String? country,
       String? password}) async {
-    var res = await firebaseAuth.createUserWithEmailAndPassword(
-      email: '$email',
-      password: '$password',
-    );
-    if (res.user != null) {
-      await saveUserToFirestore(name!, res.user!, email!, country!);
-      return true;
-    } else {
-      return false;
+    try {
+      var res = await firebaseAuth.createUserWithEmailAndPassword(
+        email: '$email',
+        password: '$password',
+      );
+      print("200");
+      if (res.user != null) {
+        await saveUserToFirestore(name!, res.user!, email!, country!);
+        log("24");
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, s) {
+      log("33 {$e.toString()}");
+      log("33 {$s.toString()}");
+      throw Exception();
     }
   }
 
 //this will save the details inputted by the user to firestore.
   saveUserToFirestore(
       String name, User user, String email, String country) async {
-    await usersRef.doc(user.uid).set({
-      'username': name,
-      'email': email,
-      'time': Timestamp.now(),
-      'id': user.uid,
-      'bio': "",
-      'country': country,
-      'photoUrl': user.photoURL ?? '',
-      'gender': '',
-    });
+    print("350");
+    try {
+      usersRef.doc(user.uid).set({
+        'username': name,
+        'email': email,
+        'time': Timestamp.now(),
+        'id': user.uid,
+        'bio': "",
+        'country': country,
+        'photoUrl': user.photoURL ?? '',
+        'gender': '',
+      });
+    } catch (e) {
+      log("48 {$e.toString()}");
+    }
   }
 
 //function to login a user with his email and password

@@ -109,6 +109,7 @@ class _LoginState extends State<Login> {
           ),
           SizedBox(height: 15.0),
           PasswordFormBuilder(
+            obscureText: true,
             enabled: !viewModel.loading,
             prefix: Ionicons.lock_closed_outline,
             suffix: Ionicons.eye_outline,
@@ -116,7 +117,6 @@ class _LoginState extends State<Login> {
             textInputAction: TextInputAction.done,
             validateFunction: Validations.validatePassword,
             submitAction: () => viewModel.login(context),
-            obscureText: true,
             onSaved: (String val) {
               viewModel.setPassword(val);
             },

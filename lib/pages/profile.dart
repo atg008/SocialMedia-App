@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:social_media_app/auth/register/register.dart';
 import 'package:social_media_app/components/stream_grid_wrapper.dart';
+import 'package:social_media_app/landing/landing_page.dart';
 import 'package:social_media_app/models/post.dart';
 import 'package:social_media_app/models/user.dart';
 import 'package:social_media_app/screens/edit_profile.dart';
@@ -60,7 +61,7 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('WOOBLE'),
+        title: Text('SYNCRAFT'),
         actions: [
           widget.profileId == firebaseAuth.currentUser!.uid
               ? Center(
@@ -71,7 +72,7 @@ class _ProfileState extends State<Profile> {
                         await firebaseAuth.signOut();
                         Navigator.of(context).push(
                           CupertinoPageRoute(
-                            builder: (_) => Register(),
+                            builder: (_) => Landing(),
                           ),
                         );
                       },

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -51,18 +52,27 @@ class PostsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // setPost(PostModel post) {
+  //   if (post != null) {
+  //     description = post.description;
+  //     imgLink = post.mediaUrl;
+  //     location = post.location;
+  //     edit = true;
+  //     edit = false;
+  //     notifyListeners();
+  //   } else {
+  //     edit = false;
+  //     notifyListeners();
+  //   }
+  // }
+
   setPost(PostModel post) {
-    if (post != null) {
-      description = post.description;
-      imgLink = post.mediaUrl;
-      location = post.location;
-      edit = true;
-      edit = false;
-      notifyListeners();
-    } else {
-      edit = false;
-      notifyListeners();
-    }
+    description = post.description;
+    imgLink = post.mediaUrl;
+    location = post.location;
+    edit = true;
+    edit = false;
+    notifyListeners();
   }
 
   setUsername(String val) {
@@ -91,14 +101,21 @@ class PostsViewModel extends ChangeNotifier {
 
   //Functions
   pickImage({bool camera = false, BuildContext? context}) async {
+    print("getting into pick image");
     loading = true;
     notifyListeners();
     try {
-      PickedFile? pickedFile = await picker.getImage(
+      XFile? pickedFile = await picker.pickImage(
         source: camera ? ImageSource.camera : ImageSource.gallery,
       );
+      print("part 1");
+
+      if (pickedFile == null) {
+        // Handle the case where pickedFile is null
+        throw Exception("No image picked.");
+      }
       CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile!.path,
+        sourcePath: pickedFile.path,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
@@ -119,10 +136,19 @@ class PostsViewModel extends ChangeNotifier {
           ),
         ],
       );
+      print("part 2");
+
+      if (croppedFile == null) {
+        // Handle the case where croppedFile is null
+        throw Exception("Image cropping failed.");
+      }
       mediaUrl = File(croppedFile!.path);
       loading = false;
+      print("reached the end of imagepicker");
       notifyListeners();
-    } catch (e) {
+    } catch (e, s) {
+      log("136 ${e.toString()}");
+      log("137 ${s.toString()}");
       loading = false;
       notifyListeners();
       showInSnackBar('Cancelled', context);
@@ -177,8 +203,7 @@ class PostsViewModel extends ChangeNotifier {
       try {
         loading = true;
         notifyListeners();
-        await postService.uploadProfilePicture(
-            mediaUrl!, firebaseAuth.currentUser!);
+        postService.uploadProfilePicture(mediaUrl!, firebaseAuth.currentUser!);
         loading = false;
         Navigator.of(context)
             .pushReplacement(CupertinoPageRoute(builder: (_) => TabScreen()));
