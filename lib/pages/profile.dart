@@ -1,10 +1,14 @@
+// import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:social_media_app/auth/register/register.dart';
+//import 'package:social_media_app/auth/register/register.dart';
 import 'package:social_media_app/components/stream_grid_wrapper.dart';
 import 'package:social_media_app/landing/landing_page.dart';
 import 'package:social_media_app/models/post.dart';
@@ -39,6 +43,17 @@ class _ProfileState extends State<Profile> {
     return firebaseAuth.currentUser?.uid;
   }
 
+  // Future<String?> currentUserId() async {
+  //   try {
+  //     log(widget.profileId);
+  //     log(firebaseAuth.currentUser!.uid);
+  //     return firebaseAuth.currentUser?.uid;
+  //   } catch (e, s) {
+  //     log(e.toString());
+  //     log(s.toString());
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -46,15 +61,49 @@ class _ProfileState extends State<Profile> {
   }
 
   checkIfFollowing() async {
-    DocumentSnapshot doc = await followersRef
-        .doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId())
-        .get();
-    setState(() {
-      isFollowing = doc.exists;
-    });
+    try {
+      String? userId = await currentUserId();
+
+      DocumentSnapshot doc = await followersRef
+          .doc(widget.profileId)
+          .collection('userFollowers')
+          .doc(userId)
+          .get();
+      setState(() {
+        isFollowing = doc.exists;
+      });
+    } catch (e, s) {
+      log("79 $e.toString()}");
+      log("80 $s.toString()}");
+    }
   }
+
+  // checkIfFollowing() async {
+  //   try {
+  //     String? userId = await currentUserId();
+
+  //     print("Checkpoint 1");
+
+  //     try {
+  //       DocumentSnapshot doc = await followersRef
+  //           .doc(widget.profileId)
+  //           .collection('userFollowers')
+  //           .doc(userId)
+  //           .get();
+  //       setState(() {
+  //         isFollowing = doc.exists;
+  //       });
+  //     } catch (e, s) {
+  //       log("98 $e.toString()}");
+  //       log("99 $s.toString()}");
+  //     }
+
+  //     print("Checkpoint 2");
+  //   } catch (e, s) {
+  //     log("104 $e.toString()}");
+  //     log("105 $s.toString()}");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,10 +149,13 @@ class _ProfileState extends State<Profile> {
             expandedHeight: 225.0,
             flexibleSpace: FlexibleSpaceBar(
               background: StreamBuilder(
+                // stream: usersRef.doc(widget.profileId).snapshots(),
                 stream: usersRef.doc(widget.profileId).snapshots(),
+                // builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    UserModel user = UserModel.fromJson(
+                  if (snapshot.hasData == true) {
+                    // log("118 ${snapshot.data.toString()}");
+                    UserModel? user = UserModel.fromJson(
                       snapshot.data!.data() as Map<String, dynamic>,
                     );
                     return Column(
@@ -263,8 +315,7 @@ class _ProfileState extends State<Profile> {
                                       QuerySnapshot<Object?>? snap =
                                           snapshot.data;
                                       List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "POSTS", docs.length ?? 0);
+                                      return buildCount("POSTS", docs.length);
                                     } else {
                                       return buildCount("POSTS", 0);
                                     }
@@ -290,7 +341,7 @@ class _ProfileState extends State<Profile> {
                                           snapshot.data;
                                       List<DocumentSnapshot> docs = snap!.docs;
                                       return buildCount(
-                                          "FOLLOWERS", docs.length ?? 0);
+                                          "FOLLOWERS", docs.length);
                                     } else {
                                       return buildCount("FOLLOWERS", 0);
                                     }
@@ -316,7 +367,7 @@ class _ProfileState extends State<Profile> {
                                           snapshot.data;
                                       List<DocumentSnapshot> docs = snap!.docs;
                                       return buildCount(
-                                          "FOLLOWING", docs.length ?? 0);
+                                          "FOLLOWING", docs.length);
                                     } else {
                                       return buildCount("FOLLOWING", 0);
                                     }
@@ -467,16 +518,19 @@ class _ProfileState extends State<Profile> {
   }
 
   handleUnfollow() async {
-    DocumentSnapshot doc = await usersRef.doc(currentUserId()).get();
+    String? userId = await currentUserId();
+
+    DocumentSnapshot doc = await usersRef.doc(userId).get();
     users = UserModel.fromJson(doc.data() as Map<String, dynamic>);
     setState(() {
       isFollowing = false;
     });
     //remove follower
+
     followersRef
         .doc(widget.profileId)
         .collection('userFollowers')
-        .doc(currentUserId())
+        .doc(userId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -484,8 +538,9 @@ class _ProfileState extends State<Profile> {
       }
     });
     //remove following
+
     followingRef
-        .doc(currentUserId())
+        .doc(userId)
         .collection('userFollowing')
         .doc(widget.profileId)
         .get()
@@ -498,7 +553,7 @@ class _ProfileState extends State<Profile> {
     notificationRef
         .doc(widget.profileId)
         .collection('notifications')
-        .doc(currentUserId())
+        .doc(userId)
         .get()
         .then((doc) {
       if (doc.exists) {
@@ -508,20 +563,23 @@ class _ProfileState extends State<Profile> {
   }
 
   handleFollow() async {
-    DocumentSnapshot doc = await usersRef.doc(currentUserId()).get();
+    String? userId = await currentUserId();
+
+    DocumentSnapshot doc = await usersRef.doc(userId).get();
     users = UserModel.fromJson(doc.data() as Map<String, dynamic>);
     setState(() {
       isFollowing = true;
     });
+
     //updates the followers collection of the followed user
     followersRef
         .doc(widget.profileId)
         .collection('userFollowers')
-        .doc(currentUserId())
+        .doc(userId)
         .set({});
     //updates the following collection of the currentUser
     followingRef
-        .doc(currentUserId())
+        .doc(userId)
         .collection('userFollowing')
         .doc(widget.profileId)
         .set({});
@@ -529,7 +587,7 @@ class _ProfileState extends State<Profile> {
     notificationRef
         .doc(widget.profileId)
         .collection('notifications')
-        .doc(currentUserId())
+        .doc(userId)
         .set({
       "type": "follow",
       "ownerId": widget.profileId,

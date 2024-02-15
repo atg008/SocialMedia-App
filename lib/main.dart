@@ -32,6 +32,8 @@ void main() async {
     persistenceEnabled: true,
   );
 
+  FirebaseFirestore.instance.enablePersistence();
+
   // await Config.initFirebase(
   //   options: FirebaseOptions(
   //     appId: "1:1068304366604:android:349fcab862beffab3bc229",

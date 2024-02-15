@@ -21,7 +21,8 @@ class LoginViewModel extends ChangeNotifier {
     if (!form.validate()) {
       validate = true;
       notifyListeners();
-      showInSnackBar('Please fix the errors in red before submitting.',context);
+      showInSnackBar(
+          'Please fix the errors in red before submitting.', context);
     } else {
       loading = true;
       notifyListeners();
@@ -30,16 +31,17 @@ class LoginViewModel extends ChangeNotifier {
           email: email,
           password: password,
         );
-        print(success);
+        // print(success);
         if (success) {
-          Navigator.of(context).pushReplacement(
-              CupertinoPageRoute(builder: (_) => TabScreen()));
+          Navigator.of(context)
+              .pushReplacement(CupertinoPageRoute(builder: (_) => TabScreen()));
         }
       } catch (e) {
         loading = false;
         notifyListeners();
         print(e);
-        showInSnackBar('${auth.handleFirebaseAuthError(e.toString())}',context);
+        showInSnackBar(
+            '${auth.handleFirebaseAuthError(e.toString())}', context);
       }
       loading = false;
       notifyListeners();
@@ -53,12 +55,15 @@ class LoginViewModel extends ChangeNotifier {
     form.save();
     print(Validations.validateEmail(email));
     if (Validations.validateEmail(email) != null) {
-      showInSnackBar('Please input a valid email to reset your password.',context);
+      showInSnackBar(
+          'Please input a valid email to reset your password.', context);
     } else {
       try {
         await auth.forgotPassword(email!);
-        showInSnackBar('Please check your email for instructions '
-            'to reset your password', context);
+        showInSnackBar(
+            'Please check your email for instructions '
+            'to reset your password',
+            context);
       } catch (e) {
         showInSnackBar('${e.toString()}', context);
       }
@@ -77,7 +82,7 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void showInSnackBar(String value,context) {
+  void showInSnackBar(String value, context) {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
   }

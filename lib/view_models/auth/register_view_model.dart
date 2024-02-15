@@ -30,15 +30,15 @@ class RegisterViewModel extends ChangeNotifier {
         loading = true;
         notifyListeners();
         try {
-          print("78");
+          // print("78");
           bool success = await auth.createUser(
             name: username,
             email: email,
             password: password,
             country: country,
           );
-          print("122");
-          print(success);
+          // print("122");
+          // print(success);
           if (success) {
             loading = false;
             notifyListeners();

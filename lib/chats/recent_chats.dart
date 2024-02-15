@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +18,7 @@ class Chats extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Icon(Icons.keyboard_backspace),
@@ -24,8 +26,10 @@ class Chats extends StatelessWidget {
         title: Text("Chats"),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: userChatsStream('${viewModel.user!.uid ?? ""}'),
+        stream: userChatsStream('${viewModel.user!.uid}'),
         builder: (context, snapshot) {
+          // log(snapshot.connectionState.toString());
+          // log("32 ${snapshot.data!.docs.toString()}");
           if (snapshot.hasData) {
             List chatList = snapshot.data!.docs;
             if (chatList.isNotEmpty) {
@@ -44,7 +48,7 @@ class Chats extends StatelessWidget {
                         List users = chatListSnapshot.get('users');
                         // remove the current user's id from the Users
                         // list so we can get the second user's id
-                        users.remove('${viewModel.user!.uid ?? ""}');
+                        users.remove('${viewModel.user!.uid}');
                         String recipient = users[0];
                         return ChatItem(
                           userId: recipient,
@@ -53,7 +57,7 @@ class Chats extends StatelessWidget {
                           time: message.time!,
                           chatId: chatListSnapshot.id,
                           type: message.type!,
-                          currentUserId: viewModel.user!.uid ?? "",
+                          currentUserId: viewModel.user!.uid,
                         );
                       } else {
                         return SizedBox();
@@ -76,6 +80,7 @@ class Chats extends StatelessWidget {
               return Center(child: Text('No Chats'));
             }
           } else {
+            log("going in the last condition");
             return Center(child: circularProgress(context));
           }
         },
@@ -84,8 +89,10 @@ class Chats extends StatelessWidget {
   }
 
   Stream<QuerySnapshot> userChatsStream(String uid) {
+    log("going in userchat stream");
+    log(uid);
     return chatRef
-        .where('users', arrayContains: '$uid')
+        .where('users', arrayContains: uid)
         .orderBy('lastTextTime', descending: true)
         .snapshots();
   }
