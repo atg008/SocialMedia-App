@@ -7,7 +7,7 @@ import 'package:social_media_app/components/life_cycle_event_handler.dart';
 import 'package:social_media_app/landing/landing_page.dart';
 import 'package:social_media_app/screens/mainscreen.dart';
 import 'package:social_media_app/services/user_service.dart';
-import 'package:social_media_app/utils/config.dart';
+// import 'package:social_media_app/utils/config.dart';
 import 'package:social_media_app/utils/constants.dart';
 import 'package:social_media_app/utils/providers.dart';
 import 'package:social_media_app/view_models/theme/theme_view_model.dart';

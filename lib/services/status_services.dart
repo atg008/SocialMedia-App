@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/models/status.dart';
@@ -38,7 +38,7 @@ class StatusService {
         ids.add(documentSnapshot.get('id'));
       });
     });
-    User? user = firebaseAuth.currentUser;
+    // User? user = firebaseAuth.currentUser;
     DocumentReference ref = await statusRef.add({
       'whoCanSee': ids,
     });

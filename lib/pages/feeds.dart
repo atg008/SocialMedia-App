@@ -15,7 +15,7 @@ class Feeds extends StatefulWidget {
   _FeedsState createState() => _FeedsState();
 }
 
-class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin{
+class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   int page = 5;
@@ -38,6 +38,7 @@ class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     print('>>>');
     return Scaffold(
       key: scaffoldKey,

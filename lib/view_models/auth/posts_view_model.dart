@@ -142,7 +142,7 @@ class PostsViewModel extends ChangeNotifier {
         // Handle the case where croppedFile is null
         throw Exception("Image cropping failed.");
       }
-      mediaUrl = File(croppedFile!.path);
+      mediaUrl = File(croppedFile.path);
       loading = false;
       print("reached the end of imagepicker");
       notifyListeners();
