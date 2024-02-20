@@ -11,7 +11,7 @@ import 'package:social_media_app/models/post.dart';
 import 'package:social_media_app/screens/mainscreen.dart';
 import 'package:social_media_app/services/post_service.dart';
 import 'package:social_media_app/services/user_service.dart';
-import 'package:social_media_app/utils/constants.dart';
+// import 'package:social_media_app/utils/constants.dart';
 import 'package:social_media_app/utils/firebase.dart';
 
 class PostsViewModel extends ChangeNotifier {

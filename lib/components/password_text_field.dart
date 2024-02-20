@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:social_media_app/components/custom_card.dart';
 
+// ignore: must_be_immutable
 class PasswordFormBuilder extends StatefulWidget {
   final String? initialValue;
   final bool? enabled;

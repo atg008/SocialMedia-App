@@ -50,6 +50,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   Widget build(BuildContext context) {
     final align =
         widget.isMe! ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+    // ignore: unused_local_variable
     final radius = widget.isMe!
         ? BorderRadius.only(
             topLeft: Radius.circular(5.0),

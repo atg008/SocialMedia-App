@@ -7,7 +7,7 @@ import 'package:social_media_app/components/text_form_builder.dart';
 import 'package:social_media_app/models/user.dart';
 import 'package:social_media_app/utils/firebase.dart';
 import 'package:social_media_app/utils/validation.dart';
-import 'package:social_media_app/view_models/auth/posts_view_model.dart';
+// import 'package:social_media_app/view_models/auth/posts_view_model.dart';
 import 'package:social_media_app/view_models/profile/edit_profile_view_model.dart';
 import 'package:social_media_app/widgets/indicators.dart';
 
