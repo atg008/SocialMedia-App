@@ -23,11 +23,17 @@ class _CreatePostState extends State<CreatePost> {
     }
 
     PostsViewModel viewModel = Provider.of<PostsViewModel>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        await viewModel.resetPost();
-        return true;
+    return PopScope(
+      onPopInvoked: (bool r) async {
+        viewModel.resetPost();
+        if (r) {
+          return;
+        }
       },
+      // onWillPop: () async {
+      //   await viewModel.resetPost();
+      //   return true;
+      // },
       child: LoadingOverlay(
         progressIndicator: circularProgress(context),
         isLoading: viewModel.loading,
@@ -217,7 +223,7 @@ class _CreatePostState extends State<CreatePost> {
                 title: Text('Camera'),
                 onTap: () {
                   Navigator.pop(context);
-                  viewModel.pickImage(camera: true);
+                  viewModel.pickImage(context: context, camera: true);
                 },
               ),
               ListTile(
@@ -225,7 +231,7 @@ class _CreatePostState extends State<CreatePost> {
                 title: Text('Gallery'),
                 onTap: () {
                   Navigator.pop(context);
-                  viewModel.pickImage();
+                  viewModel.pickImage(context: context);
                 },
               ),
             ],

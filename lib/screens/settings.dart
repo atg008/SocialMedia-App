@@ -19,14 +19,14 @@ class _SettingState extends State<Setting> {
           },
           child: Icon(Icons.keyboard_backspace),
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0.0,
         title: Text(
           "Settings",
           style: TextStyle(),
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Padding(
         padding: EdgeInsets.all(10.0),
         child: ListView(
@@ -39,7 +39,7 @@ class _SettingState extends State<Setting> {
                   ),
                 ),
                 subtitle: Text(
-                  "A Fully Functional Social Media Application Made by CharlyKeleb",
+                  "A Fully Functional Social Media Application",
                 ),
                 trailing: Icon(Icons.error)),
             Divider(),

@@ -197,7 +197,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 title: Text('Camera'),
                 onTap: () {
                   Navigator.pop(context);
-                  viewModel.pickImage(camera: true);
+                  viewModel.pickImage(context: context, camera: true);
                 },
               ),
               ListTile(
@@ -205,7 +205,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 title: Text('Gallery'),
                 onTap: () {
                   Navigator.pop(context);
-                  viewModel.pickImage();
+                  viewModel.pickImage(context: context);
                   // viewModel.pickProfilePicture();
                 },
               ),

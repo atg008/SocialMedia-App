@@ -30,7 +30,18 @@ class Chats extends StatelessWidget {
           // log(snapshot.connectionState.toString());
           // log("32 ${snapshot.data!.docs.toString()}");
           if (snapshot.hasData) {
-            List chatList = snapshot.data!.docs;
+            List<QueryDocumentSnapshot> chatList = snapshot.data!.docs;
+            print("${chatList.map((e) => e.data())}");
+            chatList.sort((a, b) {
+              Map First = a.data() as Map;
+              Map Second = b.data() as Map;
+              DateTime FirstDate =
+                  DateTime.parse(First["lastTextTime"].toDate().toString());
+              DateTime SecondDate =
+                  DateTime.parse(Second["lastTextTime"].toDate().toString());
+              return SecondDate.compareTo(FirstDate);
+            });
+            // print(snapshot.data!.docs.map((e) => e.toString()));
             if (chatList.isNotEmpty) {
               return ListView.separated(
                 itemCount: chatList.length,
@@ -92,8 +103,12 @@ class Chats extends StatelessWidget {
     log(uid);
     return chatRef
         .where('users', arrayContains: uid)
-        .orderBy('lastTextTime', descending: true)
+        // .where(field)
+
         .snapshots();
+    // .orderBy("users")
+    //.orderBy('lastTextTime', descending: true)
+    // .snapshots();
   }
 
   Stream<QuerySnapshot> messageListStream(String documentId) {

@@ -141,7 +141,7 @@ class _ConversationState extends State<Conversation> {
                             style: TextStyle(
                               fontSize: 15.0,
                               color:
-                                  Theme.of(context).textTheme.headline6!.color,
+                                  Theme.of(context).textTheme.titleLarge!.color,
                             ),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10.0),
@@ -151,7 +151,7 @@ class _ConversationState extends State<Conversation> {
                               hintStyle: TextStyle(
                                 color: Theme.of(context)
                                     .textTheme
-                                    .headline6!
+                                    .titleLarge!
                                     .color,
                               ),
                             ),
@@ -389,6 +389,8 @@ class _ConversationState extends State<Conversation> {
     return chatRef
         .doc(documentId)
         .collection('messages')
+        // .where("users", arrayContains: firebaseAuth.currentUser!.uid)
+        // .where("users", arrayContains: widget.userId)
         .orderBy('time')
         .snapshots();
   }

@@ -100,7 +100,7 @@ class PostsViewModel extends ChangeNotifier {
   }
 
   //Functions
-  pickImage({bool camera = false, BuildContext? context}) async {
+  pickImage({bool camera = false, required BuildContext context}) async {
     print("getting into pick image");
     loading = true;
     notifyListeners();
@@ -108,31 +108,37 @@ class PostsViewModel extends ChangeNotifier {
       XFile? pickedFile = await picker.pickImage(
         source: camera ? ImageSource.camera : ImageSource.gallery,
       );
-      print("part 1");
+      print("part 1 ${pickedFile}");
 
       if (pickedFile == null) {
         // Handle the case where pickedFile is null
         throw Exception("No image picked.");
       }
+      print("before cropped file");
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
+        // aspectRatioPresets: [
+        //   CropAspectRatioPreset.ratio7x5,
+        //   CropAspectRatioPreset.square,
+        //   CropAspectRatioPreset.ratio3x2,
+        //   CropAspectRatioPreset.original,
+        //   CropAspectRatioPreset.ratio4x3,
+        //   CropAspectRatioPreset.ratio16x9
+        // ],
+        // );
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',
-            toolbarColor: Constants.lightAccent,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false,
+            // toolbarColor: Constants.lightAccent,
+            // toolbarWidgetColor: Colors.white,
+            // initAspectRatio: CropAspectRatioPreset.original,
+            // lockAspectRatio: false,
           ),
-          IOSUiSettings(
-            minimumAspectRatio: 1.0,
+          // IOSUiSettings(
+          //   minimumAspectRatio: 1.0,
+          // ),
+          WebUiSettings(
+            context: context,
           ),
         ],
       );
@@ -143,6 +149,8 @@ class PostsViewModel extends ChangeNotifier {
         throw Exception("Image cropping failed.");
       }
       mediaUrl = File(croppedFile.path);
+
+      // mediaUrl = File(pickedFile.path);
       loading = false;
       print("reached the end of imagepicker");
       notifyListeners();

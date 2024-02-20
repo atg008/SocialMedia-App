@@ -78,33 +78,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  // checkIfFollowing() async {
-  //   try {
-  //     String? userId = await currentUserId();
-
-  //     print("Checkpoint 1");
-
-  //     try {
-  //       DocumentSnapshot doc = await followersRef
-  //           .doc(widget.profileId)
-  //           .collection('userFollowers')
-  //           .doc(userId)
-  //           .get();
-  //       setState(() {
-  //         isFollowing = doc.exists;
-  //       });
-  //     } catch (e, s) {
-  //       log("98 $e.toString()}");
-  //       log("99 $s.toString()}");
-  //     }
-
-  //     print("Checkpoint 2");
-  //   } catch (e, s) {
-  //     log("104 $e.toString()}");
-  //     log("105 $s.toString()}");
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,12 +122,9 @@ class _ProfileState extends State<Profile> {
             expandedHeight: 225.0,
             flexibleSpace: FlexibleSpaceBar(
               background: StreamBuilder(
-                // stream: usersRef.doc(widget.profileId).snapshots(),
                 stream: usersRef.doc(widget.profileId).snapshots(),
-                // builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData == true) {
-                    // log("118 ${snapshot.data.toString()}");
                     UserModel? user = UserModel.fromJson(
                       snapshot.data!.data() as Map<String, dynamic>,
                     );
@@ -608,7 +578,7 @@ class _ProfileState extends State<Profile> {
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       stream: postRef
           .where('ownerId', isEqualTo: widget.profileId)
-          .orderBy('timestamp', descending: true)
+          // .orderBy('timestamp', descending: true)
           .snapshots(),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (_, DocumentSnapshot snapshot) {

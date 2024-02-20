@@ -1,12 +1,15 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:social_media_app/models/user.dart';
 import 'package:social_media_app/services/user_service.dart';
 import 'package:social_media_app/utils/constants.dart';
+import 'package:social_media_app/view_models/auth/posts_view_model.dart';
 
 class EditProfileViewModel extends ChangeNotifier {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -68,7 +71,7 @@ class EditProfileViewModel extends ChangeNotifier {
           bio: bio,
           country: country,
         );
-        print(success);
+        // print(success);
         if (success) {
           clear();
           Navigator.pop(context);
@@ -83,13 +86,37 @@ class EditProfileViewModel extends ChangeNotifier {
     }
   }
 
-  pickImage({bool camera = false, BuildContext? context}) async {
+  pickImage({bool camera = false, required BuildContext context}) async {
     loading = true;
     notifyListeners();
     try {
       XFile? pickedFile = await picker.pickImage(
         source: camera ? ImageSource.camera : ImageSource.gallery,
       );
+      log(" 94 $pickedFile");
+
+      // Center(
+      //   child: ElevatedButton(
+      //     style: ButtonStyle(
+      //       backgroundColor: MaterialStateProperty.all<Color>(
+      //           Theme.of(context).colorScheme.secondary),
+      //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      //         RoundedRectangleBorder(
+      //           borderRadius: BorderRadius.circular(5.0),
+      //         ),
+      //       ),
+      //     ),
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(20.0),
+      //       child: Center(
+      //         child: Text('done'.toUpperCase()),
+      //       ),
+      //     ),
+      //     onPressed: () => Provider.of<PostsViewModel>(context)
+      //         .uploadProfilePicture(context),
+      //   ),
+      // );
+
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile!.path,
         aspectRatioPresets: [
@@ -110,12 +137,17 @@ class EditProfileViewModel extends ChangeNotifier {
           IOSUiSettings(
             minimumAspectRatio: 1.0,
           ),
+          WebUiSettings(context: context)
         ],
       );
+
+      log("sanjay");
       image = File(croppedFile!.path);
       loading = false;
       notifyListeners();
-    } catch (e) {
+    } catch (e, s) {
+      log("122 ${e.toString()}");
+      log("123 ${s.toString()}");
       loading = false;
       notifyListeners();
       showInSnackBar('Cancelled', context);
