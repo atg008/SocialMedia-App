@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -93,7 +93,7 @@ class EditProfileViewModel extends ChangeNotifier {
       XFile? pickedFile = await picker.pickImage(
         source: camera ? ImageSource.camera : ImageSource.gallery,
       );
-      log(" 94 $pickedFile");
+      // log(" 94 $pickedFile");
 
       // Center(
       //   child: ElevatedButton(
@@ -141,7 +141,6 @@ class EditProfileViewModel extends ChangeNotifier {
         ],
       );
 
-      log("sanjay");
       image = File(croppedFile!.path);
       loading = false;
       notifyListeners();
